@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Hopuful Foundation - Empowering Young Minds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">    
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#16BC88" data-border-radius='small'></script>
+    <style>
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-scroll {
+            animation: scroll 40s linear infinite;
+        }
+        
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 80%;
+            width: 600px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .close-popup {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .popup.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .popup.show .popup-content {
+            transform: scale(1);
+        }
+        
+        /* Zoom out animation for closing */
+        .popup.hide .popup-content {
+            transform: scale(0);
+        }
+        
+        .popup.hide {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="font-[Inter] bg-gray-50">
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">            
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">                        
+                        <img class="h-8 w-auto" src="./images/Logo green.png" alt="Hopuful" style="width: 80px; height: 80px;">
+                    </div>                
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
+                    <a href="" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="vision-link">Vision</a>
+                    <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="mission-link">Mission</a>
+                    <a href="Login.html" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vision Popup -->
+    <div id="vision-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-vision">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
+            <p class="text-gray-700">To cultivate and empower young minds across diverse spheres and sectors of influence worldwide, fostering their growth into maturity and demonstrating that achieving a balanced and fulfilling life is both attainable and sustainable.</p>
+        </div>
+    </div>
+
+    <!-- Mission Popup -->
+    <div id="mission-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-mission">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+            <p class="text-gray-700">To equip young minds with the tools, skills, and opportunities needed to excel in various areas of influence, while promoting a complete system of development, stability, and the pursuit of a balanced and impactful life.</p>
+        </div>
+    </div>
+
+    <!-- Payment Details Popup -->
+    <div id="payment-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-payment">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Payment Details</h2>
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <p class="text-gray-700 font-semibold">Amount: ₦5,000</p>
+                <p class="text-gray-700 mt-2">Bank Name: First Bank</p>
+                <p class="text-gray-700">Account Number: 1234567890</p>
+                <p class="text-gray-700">Account Name: Hopuful Foundation</p>
+            </div>
+            <p class="text-gray-600 text-sm mb-4">Please make your payment to the account details above. After payment, click the "Confirm Payment" button to join our WhatsApp community.</p>
+            <button id="confirm-payment" class="!rounded-button w-full bg-custom text-white px-6 py-3 text-lg font-semibold">
+                Confirm Payment
+            </button>
+        </div>
+    </div>
+
+    <main class="pt-16">
+        <section class="relative bg-gray-900 h-[600px]">            
+            <div class="absolute inset-0">
+                <img src="./images/img1.jpg" class="w-full h-full object-cover" alt="Hero">                
+                <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+            </div>
+            <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">                
+                <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Empowering Young Minds</h1>
+                <p class="mt-6 max-w-3xl text-xl text-gray-300">To cultivate and empower young minds across diverse spheres and sectors of influence worldwide, fostering their growth into maturity and demonstrating that achieving a balanced and fulfilling life is both attainable and sustainable.</p>                
+                <div class="mt-10">
+                    <button id="pay-now-button" class="!rounded-button bg-custom text-white px-8 py-3 text-lg font-semibold shadow-lg hover:bg-custom/90">                        
+                        Join Our Community - ₦5,000
+                    </button>
+                </div>
+            </div>
+        </section>        
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">                    
+                    <h2 class="text-3xl font-bold text-gray-900">Our Impact</h2>
+                    <p class="mt-4 text-lg text-gray-600">See how we're making a difference in young lives</p>
+                </div>
+                <div class="mt-16 overflow-hidden">
+                    <div class="flex space-x-8 animate-scroll">                        
+                        <div class="flex-none w-80">
+                            <img src="./images/img.jpg" class="rounded-lg shadow-lg" alt="Impact 1">                            
+                            <h3 class="mt-4 text-lg font-semibold">Leadership Workshop</h3>
+                            <p class="text-gray-600">Empowering future leaders</p>
+                        </div>
+                        <!-- More image sections... -->
+                        <div class="flex-none w-80">
+                            <img src="./images/img1.jpg" class="rounded-lg shadow-lg" alt="Impact 2">                            
+                            <h3 class="mt-4 text-lg font-semibold">Tech Training</h3>
+                            <p class="text-gray-600">Building digital skills</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img2.jpg" class="rounded-lg shadow-lg" alt="Impact 3">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img3.jpg" class="rounded-lg shadow-lg" alt="Impact 4">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img4.jpg" class="rounded-lg shadow-lg" alt="Impact 5">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img5.jpg" class="rounded-lg shadow-lg" alt="Impact 6">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img6.jpg" class="rounded-lg shadow-lg" alt="Impact 7">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img7.jpg" class="rounded-lg shadow-lg" alt="Impact 8">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img8.jpg" class="rounded-lg shadow-lg" alt="Impact 9">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img9.jpg" class="rounded-lg shadow-lg" alt="Impact 10">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img10.jpg" class="rounded-lg shadow-lg" alt="Impact 11">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img11.jpg" class="rounded-lg shadow-lg" alt="Impact 12">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+           
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mt-16 overflow-hidden">
+                    <div class="flex space-x-8 animate-scroll">                        
+                        <div class="flex-none w-80">
+                            <img src="./images/img12.jpg" class="rounded-lg shadow-lg" alt="Impact 13">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img13.jpg" class="rounded-lg shadow-lg" alt="Impact 14">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img14.jpg" class="rounded-lg shadow-lg" alt="Impact 15">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img15.jpg" class="rounded-lg shadow-lg" alt="Impact 16">
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img16.jpg" class="rounded-lg shadow-lg" alt="Impact 17">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img17.jpg" class="rounded-lg shadow-lg" alt="Impact 18">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img18.jpg" class="rounded-lg shadow-lg" alt="Impact 19">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img19.jpg" class="rounded-lg shadow-lg" alt="Impact 20">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <div class="flex-none w-80">
+                            <img src="./images/img20.jpg" class="rounded-lg shadow-lg" alt="Impact 3">                            
+                            <h3 class="mt-4 text-lg font-semibold">Entrepreneurship Program</h3>
+                            <p class="text-gray-600">Fostering innovation</p>
+                        </div>
+                        <!-- Additional images abbreviated for brevity -->
+                    </div>
+                </div>
+            </div>
+        </section>       
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center">                    
+                    <h2 class="text-3xl font-bold text-gray-900">Join Our Community</h2>
+                    <p class="mt-4 text-lg text-gray-600">Connect with like-minded individuals and access exclusive resources</p>
+                    <div class="mt-10">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">                            
+                            <div class="text-2xl font-bold text-gray-900 mb-4">₦5,000</div>
+                            <button id="pay-now-button" class="!rounded-button w-full bg-custom text-white px-6 py-3 text-lg font-semibold">                                
+                                Pay Now
+                            </button>
+                        </div>
+                    </div>                
+                </div>
+            </div>
+        </section>                                            
+    </main>
+
+    <footer class="bg-gray-900">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img class="h-8" src="./images/Logo white.png" alt="Hopuful" style="width: 80px; height: 80px;">                    
+                    <p class="mt-4 text-gray-400">Empowering young minds for a better future</p>
+                </div>
+                <div>                    
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
+                    <ul class="mt-4 space-y-4">                      
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white" id="vision-link-footer">Vision</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white" id="mission-link-footer">Mission</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Contact</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li class="text-base text-gray-300">thehopefulfoundation90@gmail.com</li>                        
+                        
+                    </ul>
+                </div>                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Follow Us</h3>                    
+                    <div class="mt-4 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/the_hopeful_foundation?igsh=MWduOHpmdmVuMXA0cg==" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/@thehopefulfoundation-gx2pv?si=G7EwE14RC0sQnbUO" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>            
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8">
+                <p class="text-base text-gray-400 text-center">&copy; 2025 The Hopeuful Foundation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Popup functionality for Vision and Mission
+        const visionLink = document.getElementById('vision-link');
+        const missionLink = document.getElementById('mission-link');
+        const visionPopup = document.getElementById('vision-popup');
+        const missionPopup = document.getElementById('mission-popup');
+        const closeVision = document.getElementById('close-vision');
+        const closeMission = document.getElementById('close-mission');
+        
+        // Footer links
+        const visionLinkFooter = document.getElementById('vision-link-footer');
+        const missionLinkFooter = document.getElementById('mission-link-footer');
+        
+        if (visionLinkFooter) {
+            visionLinkFooter.addEventListener('click', function(e) {
+                e.preventDefault();
+                visionPopup.classList.add('show');
+            });
+        }
+        
+        if (missionLinkFooter) {
+            missionLinkFooter.addEventListener('click', function(e) {
+                e.preventDefault();
+                missionPopup.classList.add('show');
+            });
+        }
+        
+        // Show Vision popup
+        if (visionLink) {
+            visionLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                visionPopup.classList.add('show');
+            });
+        }
+        
+        // Show Mission popup
+        if (missionLink) {
+            missionLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                missionPopup.classList.add('show');
+            });
+        }
+        
+        // Function to close popup with animation
+        function closePopupWithAnimation(popup) {
+            popup.classList.add('hide');
+            setTimeout(() => {
+                popup.classList.remove('show');
+                popup.classList.remove('hide');
+            }, 400); // Match this with the CSS transition duration
+        }
+        
+        // Close Vision popup
+        if (closeVision) {
+            closeVision.addEventListener('click', function() {
+                closePopupWithAnimation(visionPopup);
+            });
+        }
+        
+        // Close Mission popup
+        if (closeMission) {
+            closeMission.addEventListener('click', function() {
+                closePopupWithAnimation(missionPopup);
+            });
+        }
+        
+        // Payment popup functionality
+        const payNowButton = document.getElementById('pay-now-button');
+        const paymentPopup = document.getElementById('payment-popup');
+        const closePayment = document.getElementById('close-payment');
+        const confirmPayment = document.getElementById('confirm-payment');
+        
+        // Show Payment popup
+        if (payNowButton) {
+            payNowButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                paymentPopup.classList.add('show');
+            });
+        }
+        
+        // Close Payment popup
+        if (closePayment) {
+            closePayment.addEventListener('click', function() {
+                closePopupWithAnimation(paymentPopup);
+            });
+        }
+        
+        // Confirm Payment button
+        if (confirmPayment) {
+            confirmPayment.addEventListener('click', function() {
+                // Redirect to WhatsApp
+                window.location.href = 'https://wa.me/+2348123456789?text=Hello%20Hopuful%20Foundation,%20I%20have%20made%20my%20payment%20of%20₦5,000.%20Please%20find%20attached%20the%20screenshot%20of%20my%20payment.';
+            });
+        }
+        
+        // Close popups when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === visionPopup) {
+                closePopupWithAnimation(visionPopup);
+            }
+            if (e.target === missionPopup) {
+                closePopupWithAnimation(missionPopup);
+            }
+            if (e.target === paymentPopup) {
+                closePopupWithAnimation(paymentPopup);
+            }
+        });
+
+        const scrollContent = document.querySelector('.animate-scroll');
+        if (scrollContent) {
+            scrollContent.addEventListener('animationend', () => {
+                scrollContent.style.animation = 'none';
+                void scrollContent.offsetWidth;
+                scrollContent.style.animation = null;
+            });
+        }
+    </script>
+</body>
+</html>
