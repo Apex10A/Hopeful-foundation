@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <title>Hopuful Foundation - Empowering Young Minds</title>
+    <title>Hopeful Foundation - Empowering Young Minds</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">    
@@ -44,6 +44,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transform: scale(0);
             transition: transform 0.4s ease;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         
         .close-popup {
@@ -71,6 +73,34 @@
         .popup.hide {
             opacity: 0;
         }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            z-index: 49;
+        }
+        
+        .mobile-menu.open {
+            display: block;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 1rem;
+        }
+        
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body class="font-[Inter] bg-gray-50">
@@ -79,17 +109,37 @@
             <div class="flex justify-between h-16">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">                        
-                        <img class="h-8 w-auto" src="./images/Logo green.png" alt="Hopuful" style="width: 80px; height: 80px;">
+                        <img class="h-8 w-auto" src="./images/Logo green.png" alt="Hopeful" style="width: 80px; height: 80px;">
                     </div>                
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
                     <a href="" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Home</a>
                     <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="vision-link">Vision</a>
                     <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="about-us">About us</a>
+                    <a href="#programs" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Programs</a>
                     <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="mission-link">Mission</a>
+                    <a href="#testimonials" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Testimonials</a>
                     <a href="Login.html" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Logout</a>
                 </div>
+                <!-- Mobile menu button -->
+                <div class="flex items-center sm:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-custom hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-custom">
+                        <span class="sr-only">Open main menu</span>
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="" class="text-gray-700 hover:text-custom">Home</a>
+            <a href="#" class="text-gray-700 hover:text-custom mobile-vision-link">Vision</a>
+            <a href="#" class="text-gray-700 hover:text-custom mobile-about-link">About us</a>
+            <a href="#programs" class="text-gray-700 hover:text-custom">Programs</a>
+            <a href="#" class="text-gray-700 hover:text-custom mobile-mission-link">Mission</a>
+            <a href="#testimonials" class="text-gray-700 hover:text-custom">Testimonials</a>
+            <a href="Login.html" class="text-gray-700 hover:text-custom">Logout</a>
         </div>
     </nav>
 
@@ -107,11 +157,17 @@
         <div class="popup-content">
             <span class="close-popup" id="close-about">&times;</span>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">About us</h2>
-            <p class="text-gray-700">Our Story
-                The Hopeful Foundation was born from a deep passion to see young minds not just survive, but thrive in all aspects of life. We believe that balance—Spiritual, Physical, and Mental (emotional, financial, and social) is the key to sustainable success. 
-                
-                Our journey began with a simple yet powerful idea: equip young people with tools and opportunities to grow, lead, and make an impact. 
-                Over the years, we have expanded into multiple spheres, touching lives through mentorship, skill development, personal growth training, and impactful seminars like THE SIX SHIPS.</p>
+            <p class="text-gray-700 mb-4">The Hopeful Foundation was born from a deep passion to see young minds not just survive, but thrive in all aspects of life. We believe that balance—Spiritual, Physical, and Mental (emotional, financial, and social) is the key to sustainable success.</p>
+            <p class="text-gray-700 mb-4">Our journey began with a simple yet powerful idea: equip young people with tools and opportunities to grow, lead, and make an impact. Over the years, we have expanded into multiple spheres, touching lives through mentorship, skill development, personal growth training, and impactful seminars like THE SIX SHIPS.</p>
+            
+            <h3 class="text-xl font-bold text-gray-900 mt-6 mb-2">Our Core Values</h3>
+            <ul class="list-disc pl-5 text-gray-700 mb-4">
+                <li><strong>Empowerment</strong> – We believe in equipping individuals to take charge of their own growth.</li>
+                <li><strong>Balance</strong> – A well-rounded life is essential for true success.</li>
+                <li><strong>Innovation</strong> – We adapt and evolve to meet the needs of a changing world.</li>
+                <li><strong>Integrity</strong> – Transparency and honesty guide all that we do.</li>
+                <li><strong>Community</strong> – Growth happens best in a supportive environment.</li>
+            </ul>
         </div>
     </div>
 
@@ -150,15 +206,82 @@
             </div>
             <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">                
                 <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Empowering Young Minds</h1>
-                <p class="mt-6 max-w-3xl text-xl text-gray-300">To cultivate and empower young minds across diverse spheres and sectors of influence worldwide, fostering their growth into maturity and demonstrating that achieving a balanced and fulfilling life is both attainable and sustainable.</p>                
+                <p class="mt-6 max-w-3xl text-xl text-gray-300">Creating Balanced Lives - We equip, empower, and elevate individuals to reach their full potential through practical tools, skills, mentorship, and growth opportunities.</p>                
                 <div class="mt-10">
-                    <button class="!rounded-button bg-custom text-white px-8 py-3 text-lg font-semibold shadow-lg hover:bg-custom/90">                        
+                    <button id="join-community-button" class="!rounded-button bg-custom text-white px-8 py-3 text-lg font-semibold shadow-lg hover:bg-custom/90">                        
                         Join Our Community - ₦5,000
                     </button>
                 </div>
             </div>
-        </section>        
-        <section class="py-24 bg-white">
+        </section>  
+        
+        <!-- What We Do Section -->
+        <section id="programs" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">                    
+                    <h2 class="text-3xl font-bold text-gray-900">What We Do</h2>
+                    <p class="mt-4 text-lg text-gray-600">Our programs and initiatives to empower young minds</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Program 1 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-calendar-alt text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">THE SIX SHIPS Annual Seminar</h3>
+                        <p class="text-gray-700">A transformational seminar designed to educate, equip, and inspire young minds in areas such as leadership, personal development, business, communication, and more.</p>
+                    </div>
+                    
+                    <!-- Program 2 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-user-friends text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Personal Development & Goal-Setting</h3>
+                        <p class="text-gray-700">One-on-one and group coaching sessions focused on goal setting, effective communication, and life skills designed to help individuals maximize their potential.</p>
+                    </div>
+                    
+                    <!-- Program 3 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-lightbulb text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Skill Development & Entrepreneurship</h3>
+                        <p class="text-gray-700">Practical training in fashion design, footwear creation, and other crafts alongside business mentorship to turn skills into profitable ventures.</p>
+                    </div>
+                    
+                    <!-- Program 4 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Mentorship & Leadership Development</h3>
+                        <p class="text-gray-700">Connecting young people with mentors who guide them in career, business, and personal growth while encouraging a mindset of responsibility and excellence.</p>
+                    </div>
+                    
+                    <!-- Program 5 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-hands-helping text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Community Outreach</h3>
+                        <p class="text-gray-700">Programs designed to address challenges faced by young people, helping them build emotional, financial, and social stability.</p>
+                    </div>
+                    
+                    <!-- Program 6 -->
+                    <div class="bg-gray-50 rounded-lg p-6 shadow-md">
+                        <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center mb-4">
+                            <i class="fas fa-balance-scale text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Stability-Balancing Programs</h3>
+                        <p class="text-gray-700">Focused initiatives that help young people achieve balance in spiritual, physical, and mental (emotional, financial, and social) aspects of life.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+            
+        <section class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">                    
                     <h2 class="text-3xl font-bold text-gray-900">Our Impact</h2>
@@ -171,22 +294,63 @@
                 </div>
             </div>
         </section>           
-        <section class="py-24 bg-white">
+        <section class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mt-16 overflow-hidden">
+                <div class="mt-8 overflow-hidden">
                     <div id="image-container-2" class="flex space-x-8 animate-scroll">
                         <!-- Images will be inserted here by JavaScript -->
                     </div>
                 </div>
             </div>
-        </section>       
-        <section class="py-24 bg-gray-50">
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">                    
+                    <h2 class="text-3xl font-bold text-gray-900">Testimonials</h2>
+                    <p class="mt-4 text-lg text-gray-600">Stories from people whose lives have been transformed</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                N
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-bold">Nathan</h4>
+                                <p class="text-gray-600">Entrepreneur</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"Before joining this movement, I struggled with setting and achieving goals. Today, I run my own business with confidence, thanks to the training I received."</p>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <div class="h-12 w-12 bg-custom rounded-full flex items-center justify-center text-white font-bold text-xl">
+                                F
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-bold">Faith</h4>
+                                <p class="text-gray-600">Student</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 italic">"THE SIX SHIPS seminar was a turning point for me. It opened my eyes to opportunities I never knew existed."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="max-w-3xl mx-auto text-center">                    
                     <h2 class="text-3xl font-bold text-gray-900">Join Our Community</h2>
                     <p class="mt-4 text-lg text-gray-600">Connect with like-minded individuals and access exclusive resources</p>
                     <div class="mt-10">
-                        <div class="bg-white p-8 rounded-lg shadow-lg">                            
+                        <div class="bg-gray-50 p-8 rounded-lg shadow-lg">                            
                             <div class="text-2xl font-bold text-gray-900 mb-4">₦5,000</div>
                             <button id="pay-now-button" class="!rounded-button w-full bg-custom text-white px-6 py-3 text-lg font-semibold">                                
                                 Pay Now
@@ -202,22 +366,24 @@
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">            
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <img class="h-8" src="./images/logo white.png" alt="Hopuful" style="width: 80px; height: 80px;">                    
+                    <img class="h-8" src="./images/logo white.png" alt="Hopeful" style="width: 80px; height: 80px;">                    
                     <p class="mt-4 text-gray-400">Empowering young minds for a better future</p>
                 </div>
                 <div>                    
                     <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
                     <ul class="mt-4 space-y-4">                      
                         <li><a href="#" class="text-base text-gray-300 hover:text-white" id="vision-link-footer">Vision</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white" id="about-link-footer">About Us</a></li>
                         <li><a href="#" class="text-base text-gray-300 hover:text-white" id="mission-link-footer">Mission</a></li>
-                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Contact</a></li>
+                        <li><a href="#programs" class="text-base text-gray-300 hover:text-white">Programs</a></li>
+                        <li><a href="#testimonials" class="text-base text-gray-300 hover:text-white">Testimonials</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Contact</h3>
                     <ul class="mt-4 space-y-4">
-                        <li class="text-base text-gray-300">thehopefulfoundation90@gmail.com</li>                        
-                        
+                        <li class="text-base text-gray-300">Email: thehopefulfoundation90@gmail.com</li>                        
+                        <li class="text-base text-gray-300">Phone: +234 7033056264</li>
                     </ul>
                 </div>                
                 <div>
@@ -226,20 +392,20 @@
                         <a href="#" class="text-gray-400 hover:text-gray-300">                            
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="https://www.instagram.com/the_hopeful_foundation?igsh=MWduOHpmdmVuMXA0cg==" class="text-gray-400 hover:text-gray-300">                            
+                        <a href="https://www.instagram.com/the_hopeful_foundation?igsh=MWduOHpmdmVuMXA0cg==" class="text-gray-400 hover:text-gray-300" target="_blank">                            
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://youtube.com/@thehopefulfoundation-gx2pv?si=G7EwE14RC0sQnbUO" class="text-gray-400 hover:text-gray-300">                            
+                        <a href="https://youtube.com/@thehopefulfoundation-gx2pv?si=G7EwE14RC0sQnbUO" class="text-gray-400 hover:text-gray-300" target="_blank">                            
                             <i class="fab fa-youtube"></i>
                         </a>
-                        <a href="#" class="text-gray-400 hover:text-gray-300">                            
+                        <a href="https://www.linkedin.com/company/thehopefulfoundation.com/" class="text-gray-400 hover:text-gray-300" target="_blank">                            
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                     </div>
                 </div>            
             </div>
             <div class="mt-8 border-t border-gray-700 pt-8">
-                <p class="text-base text-gray-400 text-center">&copy; 2025 The Hopeuful Foundation. All rights reserved.</p>
+                <p class="text-base text-gray-400 text-center">&copy; 2025 The Hopeful Foundation. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -264,101 +430,101 @@
             },
             {
                 src: "https://live.staticflickr.com/65535/54394629504_156549f2dc_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Community Workshop",
+                description: "Growing together"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394629549_5666be55ec_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Youth Development",
+                description: "Nurturing potential"
             },
             {
                 src: "https://live.staticflickr.com/65535/54393564122_20d091fd7b_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Skills Training",
+                description: "Practical learning"
             },
             {
                 src: "https://live.staticflickr.com/65535/54393564217_3ccfe0dfce_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Mentorship Program",
+                description: "Guiding growth"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394447306_ac6c1aeb79_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "SIX SHIPS Seminar",
+                description: "Transformational event"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394629744_47b0d23055_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Goal Setting Workshop",
+                description: "Building futures"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394447486_4bd823a10c_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Fashion Design Class",
+                description: "Creative expression"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394817970_67fe656b3e_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Business Mentoring",
+                description: "Entrepreneurial guidance"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394676848_2d03e9cdd6_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Group Coaching",
+                description: "Collective growth"
             }
         ];
 
         const imageData2 = [
             {
                 src: "https://live.staticflickr.com/65535/54394823810_6d34054973_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Personal Development",
+                description: "Holistic growth"
             },
             {
                 src: "https://live.staticflickr.com/65535/54388190451_3590c14d61_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Leadership Training",
+                description: "Future leaders"
             },
             {
                 src: "https://live.staticflickr.com/65535/54387309792_9f836b5995_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Youth Forum",
+                description: "Meaningful conversations"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394823510_65bab42c79_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Skill-Building Event",
+                description: "Practical skills"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394680303_bc14e5cdda_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Mentorship Program",
+                description: "Guidance for success"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394632694_b9b57651a1_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Community Outreach",
+                description: "Making an impact"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394820490_f674f42e56_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Team Building",
+                description: "Collaborative growth"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394679043_f847dc4a04_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Workshop Session",
+                description: "Focused learning"
             },
             {
                 src: "https://live.staticflickr.com/65535/54394449016_ceac8b8a13_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
+                title: "Youth Development",
+                description: "Nurturing potential"
             }
         ];
 
-        // Function to populate image containers
-        function populateImageContainer(containerId, imageDataArray) {
+       // Function to populate image containers
+       function populateImageContainer(containerId, imageDataArray) {
             const container = document.getElementById(containerId);
             if (!container) return;
             
@@ -367,7 +533,7 @@
                 div.className = 'flex-none w-[300px] h-[300px]';
                 
                 div.innerHTML = `
-                    <img src="${image.src}" class="rounded-lg shadow-lg " alt="${image.title}">
+                    <img src="${image.src}" class="rounded-lg shadow-lg w-full h-64 object-cover" alt="${image.title}">
                     <h3 class="mt-4 text-lg font-semibold">${image.title}</h3>
                     <p class="text-gray-600">${image.description}</p>
                 `;
@@ -380,25 +546,85 @@
         populateImageContainer('image-container-1', imageData1);
         populateImageContainer('image-container-2', imageData2);
 
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('open')) {
+                    mobileMenu.classList.remove('open');
+                } else {
+                    mobileMenu.classList.add('open');
+                }
+            });
+        }
+
+        // Close mobile menu when clicking a link
+        const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('open');
+            });
+        });
+
         // Popup functionality for Vision and Mission
         const visionLink = document.getElementById('vision-link');
-        const AboutusLink = document.getElementById('about-us');
+        const aboutUsLink = document.getElementById('about-us');
         const missionLink = document.getElementById('mission-link');
         const visionPopup = document.getElementById('vision-popup');
         const missionPopup = document.getElementById('mission-popup');
-        const AboutPopup = document.getElementById('about-popup');
+        const aboutPopup = document.getElementById('about-popup');
         const closeVision = document.getElementById('close-vision');
         const closeMission = document.getElementById('close-mission');
         const closeAbout = document.getElementById('close-about');
         
         // Footer links
         const visionLinkFooter = document.getElementById('vision-link-footer');
+        const aboutLinkFooter = document.getElementById('about-link-footer');
         const missionLinkFooter = document.getElementById('mission-link-footer');
+        
+        // Mobile links
+        const mobileVisionLinks = document.querySelectorAll('.mobile-vision-link');
+        const mobileAboutLinks = document.querySelectorAll('.mobile-about-link');
+        const mobileMissionLinks = document.querySelectorAll('.mobile-mission-link');
+        
+        // Add click events for mobile links
+        mobileVisionLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                visionPopup.classList.add('show');
+                mobileMenu.classList.remove('open');
+            });
+        });
+        
+        mobileAboutLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                aboutPopup.classList.add('show');
+                mobileMenu.classList.remove('open');
+            });
+        });
+        
+        mobileMissionLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                missionPopup.classList.add('show');
+                mobileMenu.classList.remove('open');
+            });
+        });
         
         if (visionLinkFooter) {
             visionLinkFooter.addEventListener('click', function(e) {
                 e.preventDefault();
                 visionPopup.classList.add('show');
+            });
+        }
+        
+        if (aboutLinkFooter) {
+            aboutLinkFooter.addEventListener('click', function(e) {
+                e.preventDefault();
+                aboutPopup.classList.add('show');
             });
         }
         
@@ -424,11 +650,11 @@
                 missionPopup.classList.add('show');
             });
         }
-        // Show Mission popup
-        if (AboutusLink) {
-            AboutusLink.addEventListener('click', function(e) {
+        // Show About popup
+        if (aboutUsLink) {
+            aboutUsLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                AboutPopup.classList.add('show');
+                aboutPopup.classList.add('show');
             });
         }
         
@@ -454,22 +680,30 @@
                 closePopupWithAnimation(missionPopup);
             });
         }
-         // Close Mission popup
+         // Close About popup
          if (closeAbout) {
             closeAbout.addEventListener('click', function() {
-                closePopupWithAnimation(AboutPopup);
+                closePopupWithAnimation(aboutPopup);
             });
         }
         
         // Payment popup functionality
         const payNowButton = document.getElementById('pay-now-button');
+        const joinCommunityButton = document.getElementById('join-community-button');
         const paymentPopup = document.getElementById('payment-popup');
         const closePayment = document.getElementById('close-payment');
         const confirmPayment = document.getElementById('confirm-payment');
         
-        // Show Payment popup
+        // Show Payment popup from both buttons
         if (payNowButton) {
             payNowButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                paymentPopup.classList.add('show');
+            });
+        }
+        
+        if (joinCommunityButton) {
+            joinCommunityButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 paymentPopup.classList.add('show');
             });
@@ -497,6 +731,9 @@
             }
             if (e.target === missionPopup) {
                 closePopupWithAnimation(missionPopup);
+            }
+            if (e.target === aboutPopup) {
+                closePopupWithAnimation(aboutPopup);
             }
             if (e.target === paymentPopup) {
                 closePopupWithAnimation(paymentPopup);
