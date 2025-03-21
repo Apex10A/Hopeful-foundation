@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Hopuful Foundation - Empowering Young Minds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://ai-public.creatie.ai/gen_page/tailwind-custom.css" rel="stylesheet">    
+    <script src="https://cdn.tailwindcss.com/3.4.5?plugins=forms@0.5.7,typography@0.5.13,aspect-ratio@0.4.2,container-queries@0.1.1"></script>
+    <script src="https://ai-public.creatie.ai/gen_page/tailwind-config.min.js" data-color="#16BC88" data-border-radius='small'></script>
+    <style>
+        /* Base popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 80%;
+            width: 600px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: scale(0);
+            transition: transform 0.4s ease;
+        }
+        
+        .close-popup {
+            position: absolute;
+            right: 1.5rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .popup.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .popup.show .popup-content {
+            transform: scale(1);
+        }
+        
+        /* Zoom out animation for closing */
+        .popup.hide .popup-content {
+            transform: scale(0);
+        }
+        
+        .popup.hide {
+            opacity: 0;
+        }
+        
+        /* Image grid styles */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 0 auto;
+        }
+        
+        /* Image container and overlay styles */
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 4/3;
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.75rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container:hover .image-overlay {
+            transform: translateY(0);
+        }
+        
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .modal-image {
+            max-height: 75vh;
+            max-width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-caption {
+            color: white;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .modal-close, .modal-prev, .modal-next {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            opacity: 0.7;
+        }
+        
+        .modal-close:hover, .modal-prev:hover, .modal-next:hover {
+            opacity: 1;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+        
+        .modal-prev, .modal-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .modal-prev {
+            left: 1rem;
+        }
+        
+        .modal-next {
+            right: 1rem;
+        }
+        
+        /* Loading animation for images */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-[Inter] bg-gray-50">
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">            
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">                        
+                        <img class="h-8 w-auto" src="./images/Logo green.png" alt="Hopuful" style="width: 80px; height: 80px;">
+                    </div>                
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-8">
+                    <a href="" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="vision-link">Vision</a>
+                    <a href="#" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium" id="mission-link">Mission</a>
+                    <a href="Login.html" class="text-gray-700 hover:text-custom px-3 py-2 text-sm font-medium">Logout</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="flex items-center sm:hidden">
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-custom hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-custom">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu, show/hide based on menu state -->
+        <div class="sm:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="" class="text-gray-700 hover:text-custom block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#" class="text-gray-700 hover:text-custom block px-3 py-2 rounded-md text-base font-medium mobile-vision-link">Vision</a>
+                <a href="#" class="text-gray-700 hover:text-custom block px-3 py-2 rounded-md text-base font-medium mobile-mission-link">Mission</a>
+                <a href="Login.html" class="text-gray-700 hover:text-custom block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Vision Popup -->
+    <div id="vision-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-vision">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Vision</h2>
+            <p class="text-gray-700">To cultivate and empower young minds across diverse spheres and sectors of influence worldwide, fostering their growth into maturity and demonstrating that achieving a balanced and fulfilling life is both attainable and sustainable.</p>
+        </div>
+    </div>
+
+    <!-- Mission Popup -->
+    <div id="mission-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-mission">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+            <p class="text-gray-700">To equip young minds with the tools, skills, and opportunities needed to excel in various areas of influence, while promoting a complete system of development, stability, and the pursuit of a balanced and impactful life.</p>
+        </div>
+    </div>
+
+    <!-- Payment Details Popup -->
+    <div id="payment-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup" id="close-payment">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Payment Details</h2>
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <p class="text-gray-700 font-semibold">Amount: ₦5,000</p>
+                <p class="text-gray-700 mt-2">Bank Name: GTB Bank</p>
+                <p class="text-gray-700">Account Number: 0649042040</p>
+                <p class="text-gray-700">Account Name: Oluwadunsin Omotayo Hope</p>
+            </div>
+            <p class="text-gray-600 text-sm mb-4">Please make your payment to the account details above. After payment, click the "Confirm Payment" button to join our WhatsApp community.</p>
+            <button id="confirm-payment" class="!rounded-button w-full bg-custom text-white px-6 py-3 text-lg font-semibold">
+                Confirm Payment
+            </button>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal">
+        <button class="modal-close" id="modal-close">&times;</button>
+        <button class="modal-prev" id="modal-prev">&lsaquo;</button>
+        <button class="modal-next" id="modal-next">&rsaquo;</button>
+        <div class="modal-content">
+            <img id="modal-image" class="modal-image" src="" alt="Enlarged image">
+            <div class="modal-caption">
+                <h3 id="modal-title" class="text-xl font-bold text-white"></h3>
+                <p id="modal-description" class="text-gray-300"></p>
+            </div>
+        </div>
+    </div>
+
+    <main class="pt-16">
+        <section class="relative bg-gray-900 h-[600px]">            
+            <div class="absolute inset-0">
+                <img src="./images/one.jpg" class="w-full h-full object-cover" alt="Hero">                
+                <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+            </div>
+            <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">                
+                <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Empowering Young Minds</h1>
+                <p class="mt-6 max-w-3xl text-xl text-gray-300">To cultivate and empower young minds across diverse spheres and sectors of influence worldwide, fostering their growth into maturity and demonstrating that achieving a balanced and fulfilling life is both attainable and sustainable.</p>                
+                <div class="mt-10">
+                    <button id="hero-pay-button" class="!rounded-button bg-custom text-white px-8 py-3 text-lg font-semibold shadow-lg hover:bg-custom/90">                        
+                        Join Our Community - ₦5,000
+                    </button>
+                </div>
+            </div>
+        </section>        
+        
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">                    
+                    <h2 class="text-3xl font-bold text-gray-900">Our Impact</h2>
+                    <p class="mt-4 text-lg text-gray-600">See how we're making a difference in young lives</p>
+                </div>
+                
+                <!-- Filter buttons for images -->
+                <!-- <div class="mt-8 flex flex-wrap justify-center gap-2">
+                    <button class="filter-button active px-4 py-2 bg-custom text-white rounded-md" data-filter="all">All</button>
+                    <button class="filter-button px-4 py-2 bg-gray-200 text-gray-700 rounded-md" data-filter="Leadership">Leadership</button>
+                    <button class="filter-button px-4 py-2 bg-gray-200 text-gray-700 rounded-md" data-filter="Tech">Tech</button>
+                    <button class="filter-button px-4 py-2 bg-gray-200 text-gray-700 rounded-md" data-filter="Entrepreneurship">Entrepreneurship</button>
+                </div> -->
+                
+                <div class="mt-10">
+                    <div id="image-container-1" class="image-grid">
+                        <!-- Images will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="mt-16">
+                    <div id="image-container-2" class="image-grid">
+                        <!-- Images will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Load more button -->
+                <div class="mt-12 text-center">
+                    <button id="load-more" class="!rounded-button bg-custom text-white px-6 py-2 text-base font-medium">
+                        Load More
+                    </button>
+                </div>
+            </div>
+        </section>       
+        
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mx-auto text-center">                    
+                    <h2 class="text-3xl font-bold text-gray-900">Join Our Community</h2>
+                    <p class="mt-4 text-lg text-gray-600">Connect with like-minded individuals and access exclusive resources</p>
+                    <div class="mt-10">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">                            
+                            <div class="text-2xl font-bold text-gray-900 mb-4">₦5,000</div>
+                            <ul class="text-left mt-4 mb-6 space-y-2">
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-custom mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Access to our exclusive WhatsApp community</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-custom mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Learning resources and materials</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="h-5 w-5 text-custom mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Networking with peers and mentors</span>
+                                </li>
+                            </ul>
+                            <button id="pay-now-button" class="!rounded-button w-full bg-custom text-white px-6 py-3 text-lg font-semibold">                                
+                                Pay Now
+                            </button>
+                        </div>
+                    </div>                
+                </div>
+            </div>
+        </section>                                            
+    </main>
+
+    <footer class="bg-gray-900">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img class="h-8" src="./images/logo white.png" alt="Hopuful" style="width: 80px; height: 80px;">                    
+                    <p class="mt-4 text-gray-400">Empowering young minds for a better future</p>
+                </div>
+                <div>                    
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Quick Links</h3>
+                    <ul class="mt-4 space-y-4">                      
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white" id="vision-link-footer">Vision</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white" id="mission-link-footer">Mission</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Contact</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li class="text-base text-gray-300">thehopefulfoundation90@gmail.com</li>                        
+                    </ul>
+                </div>                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Follow Us</h3>                    
+                    <div class="mt-4 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/the_hopeful_foundation?igsh=MWduOHpmdmVuMXA0cg==" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/@thehopefulfoundation-gx2pv?si=G7EwE14RC0sQnbUO" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-300">                            
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>            
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8">
+                <p class="text-base text-gray-400 text-center">&copy; 2025 The Hopeuful Foundation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Image data arrays with categories added
+        const imageData1 = [
+            {
+                src: "https://live.staticflickr.com/65535/54393563812_db393eb218_k.jpg",
+                title: "Leadership Workshop",
+                description: "Empowering future leaders",
+                category: "Leadership"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393563817_061005dc3a_k.jpg",
+                title: "Tech Training",
+                description: "Building digital skills",
+                category: "Tech"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393563902_a8b52e87eb_k.jpg",
+                title: "Entrepreneurship Program",
+                description: "Fostering innovation",
+                category: "Entrepreneurship"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629504_156549f2dc_k.jpg",
+                title: "Business Strategy Session",
+                description: "Planning for success",
+                category: "Entrepreneurship"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629549_5666be55ec_k.jpg",
+                title: "Leadership Conference",
+                description: "Developing leadership qualities",
+                category: "Leadership"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393564122_20d091fd7b_k.jpg",
+                title: "Coding Workshop",
+                description: "Learning programming fundamentals",
+                category: "Tech"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629504_156549f2dc_k.jpg",
+                title: "Business Strategy Session",
+                description: "Planning for success",
+                category: "Entrepreneurship"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629549_5666be55ec_k.jpg",
+                title: "Leadership Conference",
+                description: "Developing leadership qualities",
+                category: "Leadership"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393564122_20d091fd7b_k.jpg",
+                title: "Coding Workshop",
+                description: "Learning programming fundamentals",
+                category: "Tech"
+            }
+        ];
+
+        const imageData2 = [
+            {
+                src: "https://live.staticflickr.com/65535/54393564217_3ccfe0dfce_k.jpg",
+                title: "Digital Marketing Seminar",
+                description: "Modern marketing strategies",
+                category: "Entrepreneurship"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394447306_ac6c1aeb79_k.jpg",
+                title: "Team Building Activity",
+                description: "Building strong relationships",
+                category: "Leadership"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629744_47b0d23055_k.jpg",
+                title: "Web Development Class",
+                description: "Creating modern websites",
+                category: "Tech"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394447486_4bd823a10c_k.jpg",
+                title: "Public Speaking Workshop",
+                description: "Mastering communication skills",
+                category: "Leadership"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394817970_67fe656b3e_k.jpg",
+                title: "Startup Pitch Practice",
+                description: "Perfecting business pitches",
+                category: "Entrepreneurship"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394676848_2d03e9cdd6_k.jpg",
+                title: "App Development Session",
+                description: "Building mobile applications",
+                category: "Tech"
+            }
+        ];
+        
+        // Combined data for easier filtering
+        const allImageData = [...imageData1, ...imageData2];
+        
+        // Initialize variables for pagination
+        const imagesPerPage = 6;
+        let currentPage = 1;
+        let filteredImages = allImageData;
+        
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Mobile menu vision and mission links
+            document.querySelectorAll('.mobile-vision-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('vision-popup').classList.add('show');
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+            
+            document.querySelectorAll('.mobile-mission-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.getElementById('mission-popup').classList.add('show');
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        });
+
+        // Function to create image elements with proper loading
+        function createImageElement(imageData) {
+            const container = document.createElement('div');
+            container.className = 'image-container';
+            container.setAttribute('data-category', imageData.category);
+            
+            // Create skeleton loader
+            const skeleton = document.createElement('div');
+            skeleton.className = 'loading-skeleton w-full h-full rounded-lg';
+            container.appendChild(skeleton);
+            
+            // Create actual image that loads in background
+            const img = document.createElement('img');
+            img.className = 'gallery-image hidden';
+            img.src = imageData.src;
+            img.alt = imageData.title;
+            img.loading = '';
+            
+            // Add image overlay with title and description
+            const overlay = document.createElement('div');
+            overlay.className = 'image-overlay';
+            overlay.innerHTML = `
+                <h3 class="text-lg font-semibold">${imageData.title}</h3>
+                <p class="text-sm">${imageData.description}</p>
+            `;
+            
+            // When image loads, remove skeleton and show image
+            img.onload = function() {
+                skeleton.remove();
+                img.classList.remove('hidden');
+            };
+            
+            container.appendChild(img);
+            container.appendChild(overlay);
+            
+            return container;
+        }
+
+        // Function to display images with pagination
+        function displayImages(images, page = 1) {
+            const container1 = document.getElementById('image-container-1');
+            const container2 = document.getElementById('image-container-2');
+            
+            // Clear existing content
+            container1.innerHTML = '';
+            container2.innerHTML = '';
+            
+            // Calculate start and end index for current page
+            const startIndex = (page - 1) * imagesPerPage;
+            const endIndex = startIndex + imagesPerPage;
+            const pageImages = images.slice(startIndex, endIndex);
+            
+            // Hide load more button if we're at the end
+            const loadMoreButton = document.getElementById('load-more');
+            if (endIndex >= images.length) {
+                loadMoreButton.classList.add('hidden');
+            } else {
+                loadMoreButton.classList.remove('hidden');
+            }
+            
+            // Split images between containers
+            const halfwayPoint = Math.ceil(pageImages.length / 2);
+            
+            // Add images to first container
+            pageImages.slice(0, halfwayPoint).forEach(imageData => {
+                container1.appendChild(createImageElement(imageData));
+            });
+            
+            // Add images to second container
+            pageImages.slice(halfwayPoint).forEach(imageData => {
+                container2.appendChild(createImageElement(imageData));
+            });
+            
+            // Setup click handlers for modal
+            setupImageModal();
+        }
+
+        // Filter functionality
+function setupFilters() {
+    const filterButtons = document.querySelectorAll('.filter-button');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active', 'bg-custom', 'text-white'));
+            filterButtons.forEach(btn => btn.classList.add('bg-gray-200', 'text-gray-700'));
+            
+            // Add active class to clicked button
+            this.classList.add('active', 'bg-custom', 'text-white');
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+            
+            const filter = this.getAttribute('data-filter');
+            
+            // Filter images
+            if (filter === 'all') {
+                filteredImages = allImageData;
+            } else {
+                filteredImages = allImageData.filter(img => img.category === filter);
+            }
+            
+            // Reset pagination and display filtered images
+            currentPage = 1;
+            displayImages(filteredImages, currentPage);
+        });
+    });
+}
+
+// Load more functionality
+function setupLoadMore() {
+    const loadMoreButton = document.getElementById('load-more');
+    
+    loadMoreButton.addEventListener('click', function() {
+        currentPage++;
+        displayImages(filteredImages, currentPage);
+    });
+}
+
+// Setup image modal functionality
+function setupImageModal() {
+    const imageContainers = document.querySelectorAll('.image-container');
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalClose = document.getElementById('modal-close');
+    const modalPrev = document.getElementById('modal-prev');
+    const modalNext = document.getElementById('modal-next');
+    
+    let currentImageIndex = 0;
+    
+    // Open modal when clicking on an image
+    imageContainers.forEach((container, index) => {
+        container.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            const visibleImages = Array.from(document.querySelectorAll('.image-container')).filter(
+                cont => !cont.style.display || cont.style.display !== 'none'
+            );
+            
+            currentImageIndex = visibleImages.indexOf(this);
+            const imageArray = filteredImages;
+            
+            if (currentImageIndex !== -1 && currentImageIndex < imageArray.length) {
+                const imageData = imageArray[currentImageIndex];
+                modalImage.src = imageData.src;
+                modalTitle.textContent = imageData.title;
+                modalDescription.textContent = imageData.description;
+                modal.classList.add('active');
+                
+                // Update prev/next button visibility
+                updateNavigationButtons(currentImageIndex, visibleImages.length);
+            }
+        });
+    });
+    
+    // Close modal
+    modalClose.addEventListener('click', function() {
+        modal.classList.remove('active');
+    });
+    
+    // Navigate to previous image
+    modalPrev.addEventListener('click', function() {
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            updateModalImage(currentImageIndex);
+            updateNavigationButtons(currentImageIndex, filteredImages.length);
+        }
+    });
+    
+    // Navigate to next image
+    modalNext.addEventListener('click', function() {
+        if (currentImageIndex < filteredImages.length - 1) {
+            currentImageIndex++;
+            updateModalImage(currentImageIndex);
+            updateNavigationButtons(currentImageIndex, filteredImages.length);
+        }
+    });
+    
+    // Close modal when clicking outside of content
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+    
+    // Handle keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') {
+            modal.classList.remove('active');
+        } else if (e.key === 'ArrowLeft') {
+            modalPrev.click();
+        } else if (e.key === 'ArrowRight') {
+            modalNext.click();
+        }
+    });
+}
+
+// Update modal image
+function updateModalImage(index) {
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    
+    const imageData = filteredImages[index];
+    modalImage.src = imageData.src;
+    modalTitle.textContent = imageData.title;
+    modalDescription.textContent = imageData.description;
+}
+
+// Update navigation buttons visibility
+function updateNavigationButtons(index, total) {
+    const modalPrev = document.getElementById('modal-prev');
+    const modalNext = document.getElementById('modal-next');
+    
+    modalPrev.style.visibility = index === 0 ? 'hidden' : 'visible';
+    modalNext.style.visibility = index === total - 1 ? 'hidden' : 'visible';
+}
+
+// Popup functionality
+function setupPopups() {
+    // Vision popup
+    const visionLink = document.getElementById('vision-link');
+    const visionLinkFooter = document.getElementById('vision-link-footer');
+    const visionPopup = document.getElementById('vision-popup');
+    const closeVision = document.getElementById('close-vision');
+    
+    [visionLink, visionLinkFooter].forEach(link => {
+        if (link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                visionPopup.classList.add('show');
+            });
+        }
+    });
+    
+    if (closeVision) {
+        closeVision.addEventListener('click', function() {
+            visionPopup.classList.add('hide');
+            setTimeout(() => {
+                visionPopup.classList.remove('show', 'hide');
+            }, 300);
+        });
+    }
+    
+    // Mission popup
+    const missionLink = document.getElementById('mission-link');
+    const missionLinkFooter = document.getElementById('mission-link-footer');
+    const missionPopup = document.getElementById('mission-popup');
+    const closeMission = document.getElementById('close-mission');
+    
+    [missionLink, missionLinkFooter].forEach(link => {
+        if (link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                missionPopup.classList.add('show');
+            });
+        }
+    });
+    
+    if (closeMission) {
+        closeMission.addEventListener('click', function() {
+            missionPopup.classList.add('hide');
+            setTimeout(() => {
+                missionPopup.classList.remove('show', 'hide');
+            }, 300);
+        });
+    }
+    
+    // Payment popup
+    const payButtons = document.querySelectorAll('#pay-now-button, #hero-pay-button');
+    const paymentPopup = document.getElementById('payment-popup');
+    const closePayment = document.getElementById('close-payment');
+    const confirmPayment = document.getElementById('confirm-payment');
+    
+    payButtons.forEach(button => {
+        if (button) {
+            button.addEventListener('click', function() {
+                paymentPopup.classList.add('show');
+            });
+        }
+    });
+    
+    if (closePayment) {
+        closePayment.addEventListener('click', function() {
+            paymentPopup.classList.add('hide');
+            setTimeout(() => {
+                paymentPopup.classList.remove('show', 'hide');
+            }, 300);
+        });
+    }
+    
+    if (confirmPayment) {
+        confirmPayment.addEventListener('click', function() {
+            // Redirect to WhatsApp link after payment confirmation
+            window.open('https://chat.whatsapp.com/JnUcJB9EK8K8vbU2rfdnhA', '_blank');
+            
+            // Close the popup
+            paymentPopup.classList.add('hide');
+            setTimeout(() => {
+                paymentPopup.classList.remove('show', 'hide');
+            }, 300);
+        });
+    }
+    
+    // Close popups when clicking outside content
+    document.querySelectorAll('.popup').forEach(popup => {
+        popup.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hide');
+                setTimeout(() => {
+                    this.classList.remove('show', 'hide');
+                }, 300);
+            }
+        });
+    });
+}
+
+// Initialize all functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Display initial images
+    displayImages(allImageData, currentPage);
+    
+    // Setup filters
+    setupFilters();
+    
+    // Setup load more functionality
+    setupLoadMore();
+    
+    // Setup popup functionality
+    setupPopups();
+});
+</script>
+</body>
+</html>
