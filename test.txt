@@ -897,3 +897,177 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+
+
+
+
+       const imageData1 = [
+        {
+                src: "./images/img.jpg",
+                title: "Leadership Workshop",
+                description: "Empowering future leaders"
+            },
+            {
+                src: "./images/img1.jpg",
+                title: "Tech Training",
+                description: "Building digital skills"
+            },
+            {
+                src:  "./images/img2.jpg",
+                title: "Entrepreneurship Program",
+                description: "Fostering innovation"
+            },
+            {
+                src:  "./images/img3.jpg",
+                title: "Community Workshop",
+                description: "Growing together"
+            },
+            {
+                src:  "./images/img4.jpg",
+                title: "Youth Development",
+                description: "Nurturing potential"
+            },
+            {
+                src:  "./images/img5.jpg",
+                title: "Skills Training",
+                description: "Practical learning"
+            },
+            {
+                src:  "./images/img6.jpg",
+                title: "Mentorship Program",
+                description: "Guiding growth"
+            },
+            {
+                src: "./images/img7.jpg",
+                title: "SIX SHIPS Seminar",
+                description: "Transformational event"
+            },
+            {
+                src: "./images/img8.jpg",
+                title: "Goal Setting Workshop",
+                description: "Building futures"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394447486_4bd823a10c_k.jpg",
+                title: "Fashion Design Class",
+                description: "Creative expression"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394817970_67fe656b3e_k.jpg",
+                title: "Business Mentoring",
+                description: "Entrepreneurial guidance"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394676848_2d03e9cdd6_k.jpg",
+                title: "Group Coaching",
+                description: "Collective growth"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393563812_db393eb218_k.jpg",
+                title: "Leadership Workshop",
+                description: "Empowering future leaders"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393563817_061005dc3a_k.jpg",
+                title: "Tech Training",
+                description: "Building digital skills"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393563902_a8b52e87eb_k.jpg",
+                title: "Entrepreneurship Program",
+                description: "Fostering innovation"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629504_156549f2dc_k.jpg",
+                title: "Community Workshop",
+                description: "Growing together"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629549_5666be55ec_k.jpg",
+                title: "Youth Development",
+                description: "Nurturing potential"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393564122_20d091fd7b_k.jpg",
+                title: "Skills Training",
+                description: "Practical learning"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54393564217_3ccfe0dfce_k.jpg",
+                title: "Mentorship Program",
+                description: "Guiding growth"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394447306_ac6c1aeb79_k.jpg",
+                title: "SIX SHIPS Seminar",
+                description: "Transformational event"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394629744_47b0d23055_k.jpg",
+                title: "Goal Setting Workshop",
+                description: "Building futures"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394447486_4bd823a10c_k.jpg",
+                title: "Fashion Design Class",
+                description: "Creative expression"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394817970_67fe656b3e_k.jpg",
+                title: "Business Mentoring",
+                description: "Entrepreneurial guidance"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394676848_2d03e9cdd6_k.jpg",
+                title: "Group Coaching",
+                description: "Collective growth"
+            }
+        ];
+
+        const imageData2 = [
+            {
+                src: "https://live.staticflickr.com/65535/54394823810_6d34054973_k.jpg",
+                title: "Personal Development",
+                description: "Holistic growth"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54388190451_3590c14d61_k.jpg",
+                title: "Leadership Training",
+                description: "Future leaders"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54387309792_9f836b5995_k.jpg",
+                title: "Youth Forum",
+                description: "Meaningful conversations"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394823510_65bab42c79_k.jpg",
+                title: "Skill-Building Event",
+                description: "Practical skills"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394680303_bc14e5cdda_k.jpg",
+                title: "Mentorship Program",
+                description: "Guidance for success"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394632694_b9b57651a1_k.jpg",
+                title: "Community Outreach",
+                description: "Making an impact"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394820490_f674f42e56_k.jpg",
+                title: "Team Building",
+                description: "Collaborative growth"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394679043_f847dc4a04_k.jpg",
+                title: "Workshop Session",
+                description: "Focused learning"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394449016_ceac8b8a13_k.jpg",
+                title: "Youth Development",
+                description: "Nurturing potential"
+            }
+        ];

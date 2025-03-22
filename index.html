@@ -101,6 +101,135 @@
         .mobile-menu a:last-child {
             border-bottom: none;
         }
+        
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        
+        .pagination-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .pagination-button:hover {
+            background-color: #16BC88;
+            color: white;
+        }
+        
+        .pagination-button.active {
+            background-color: #16BC88;
+            color: white;
+        }
+        
+        .pagination-button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Image grid styles */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .image-item {
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-item:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Image lightbox styles */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .lightbox.show {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            right: -1.5rem;
+            top: -1.5rem;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            z-index: 1101;
+        }
+        
+        .lightbox-caption {
+            position: absolute;
+            bottom: -3rem;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            color: white;
+            text-align: center;
+        }
+        
+        /* Image pagination fade animation */
+        .image-fade-enter {
+            opacity: 0;
+        }
+        
+        .image-fade-enter-active {
+            opacity: 1;
+            transition: opacity 300ms ease-in;
+        }
+        
+        .image-fade-exit {
+            opacity: 1;
+        }
+        
+        .image-fade-exit-active {
+            opacity: 0;
+            transition: opacity 300ms ease-out;
+        }
     </style>
 </head>
 <body class="font-[Inter] bg-gray-50">
@@ -197,6 +326,18 @@
             </button>
         </div>
     </div>
+    
+    <!-- Image Lightbox -->
+    <div id="image-lightbox" class="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close">&times;</span>
+            <img src="" alt="" class="lightbox-img">
+            <div class="lightbox-caption">
+                <h3 class="text-xl font-bold"></h3>
+                <p></p>
+            </div>
+        </div>
+    </div>
 
     <main class="pt-16">
         <section class="relative bg-gray-900 h-[600px]">            
@@ -281,25 +422,22 @@
             </div>
         </section>
             
+        <!-- Gallery Section with Pagination -->
         <section class="py-16 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">                    
+                <div class="text-center mb-12">                    
                     <h2 class="text-3xl font-bold text-gray-900">Our Impact</h2>
                     <p class="mt-4 text-lg text-gray-600">See how we're making a difference in young lives</p>
                 </div>
-                <div class="mt-16 overflow-hidden">
-                    <div id="image-container-1" class="flex space-x-8 animate-scroll">
-                        <!-- Images will be inserted here by JavaScript -->
-                    </div>
+                
+                <!-- Gallery Grid -->
+                <div id="gallery-container" class="image-grid">
+                    <!-- Images will be populated here by JavaScript -->
                 </div>
-            </div>
-        </section>           
-        <section class="py-16 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mt-8 overflow-hidden">
-                    <div id="image-container-2" class="flex space-x-8 animate-scroll">
-                        <!-- Images will be inserted here by JavaScript -->
-                    </div>
+                
+                <!-- Pagination Controls -->
+                <div id="pagination-container" class="pagination mt-8">
+                    <!-- Pagination buttons will be added here by JavaScript -->
                 </div>
             </div>
         </section>
@@ -411,342 +549,319 @@
     </footer>
 
     <script>
-        // Image data arrays
-        const imageData1 = [
+        // Combined image data (you can add more images as needed)
+        const imageData = [
             {
-                src: "https://live.staticflickr.com/65535/54393563812_db393eb218_k.jpg",
+                src: "./images/img.jpg",
                 title: "Leadership Workshop",
                 description: "Empowering future leaders"
             },
-            {
-                src: "https://live.staticflickr.com/65535/54393563817_061005dc3a_k.jpg",
-                title: "Tech Training",
-                description: "Building digital skills"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54393563902_a8b52e87eb_k.jpg",
-                title: "Entrepreneurship Program",
-                description: "Fostering innovation"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394629504_156549f2dc_k.jpg",
-                title: "Community Workshop",
-                description: "Growing together"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394629549_5666be55ec_k.jpg",
-                title: "Youth Development",
-                description: "Nurturing potential"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54393564122_20d091fd7b_k.jpg",
-                title: "Skills Training",
-                description: "Practical learning"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54393564217_3ccfe0dfce_k.jpg",
-                title: "Mentorship Program",
-                description: "Guiding growth"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394447306_ac6c1aeb79_k.jpg",
-                title: "SIX SHIPS Seminar",
-                description: "Transformational event"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394629744_47b0d23055_k.jpg",
-                title: "Goal Setting Workshop",
-                description: "Building futures"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394447486_4bd823a10c_k.jpg",
-                title: "Fashion Design Class",
-                description: "Creative expression"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394817970_67fe656b3e_k.jpg",
-                title: "Business Mentoring",
-                description: "Entrepreneurial guidance"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394676848_2d03e9cdd6_k.jpg",
-                title: "Group Coaching",
-                description: "Collective growth"
-            }
-        ];
-
-        const imageData2 = [
             {
                 src: "https://live.staticflickr.com/65535/54394823810_6d34054973_k.jpg",
                 title: "Personal Development",
                 description: "Holistic growth"
             },
+            // Add more images as needed
             {
-                src: "https://live.staticflickr.com/65535/54388190451_3590c14d61_k.jpg",
-                title: "Leadership Training",
-                description: "Future leaders"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54387309792_9f836b5995_k.jpg",
-                title: "Youth Forum",
-                description: "Meaningful conversations"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394823510_65bab42c79_k.jpg",
-                title: "Skill-Building Event",
-                description: "Practical skills"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394680303_bc14e5cdda_k.jpg",
-                title: "Mentorship Program",
-                description: "Guidance for success"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394632694_b9b57651a1_k.jpg",
+                src: "./images/one.jpg",
                 title: "Community Outreach",
-                description: "Making an impact"
+                description: "Making a difference"
             },
             {
-                src: "https://live.staticflickr.com/65535/54394820490_f674f42e56_k.jpg",
-                title: "Team Building",
-                description: "Collaborative growth"
+                src: "./images/img.jpg",
+                title: "Skills Training",
+                description: "Building capabilities"
             },
             {
-                src: "https://live.staticflickr.com/65535/54394679043_f847dc4a04_k.jpg",
+                src: "https://live.staticflickr.com/65535/54394823810_6d34054973_k.jpg",
+                title: "Youth Empowerment",
+                description: "Creating future leaders"
+            },
+            {
+                src: "./images/one.jpg",
+                title: "Mentorship Program",
+                description: "Guiding young minds"
+            },
+            {
+                src: "./images/img.jpg",
+                title: "Annual Conference",
+                description: "Bringing minds together"
+            },
+            {
+                src: "https://live.staticflickr.com/65535/54394823810_6d34054973_k.jpg",
+                title: "Group Discussion",
+                description: "Sharing ideas and perspectives"
+            },
+            {
+                src: "./images/one.jpg",
                 title: "Workshop Session",
-                description: "Focused learning"
-            },
-            {
-                src: "https://live.staticflickr.com/65535/54394449016_ceac8b8a13_k.jpg",
-                title: "Youth Development",
-                description: "Nurturing potential"
+                description: "Hands-on learning experience"
             }
         ];
-
-       // Function to populate image containers
-       function populateImageContainer(containerId, imageDataArray) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
+        
+        // Gallery pagination variables
+        const imagesPerPage = 6;
+        let currentPage = 1;
+        const totalPages = Math.ceil(imageData.length / imagesPerPage);
+        
+        // Function to display images for the current page
+        function displayImages(page) {
+            const galleryContainer = document.getElementById('gallery-container');
+            galleryContainer.innerHTML = '';
             
-            imageDataArray.forEach(image => {
-                const div = document.createElement('div');
-                div.className = 'flex-none w-[300px] h-[300px]';
-                
-                div.innerHTML = `
-                    <img src="${image.src}" class="rounded-lg shadow-lg w-full h-64 object-cover" alt="${image.title}">
-                    <h3 class="mt-4 text-lg font-semibold">${image.title}</h3>
-                    <p class="text-gray-600">${image.description}</p>
+            const startIndex = (page - 1) * imagesPerPage;
+            const endIndex = Math.min(startIndex + imagesPerPage, imageData.length);
+            
+            for (let i = startIndex; i < endIndex; i++) {
+                const image = imageData[i];
+                const imageElement = document.createElement('div');
+                imageElement.className = 'image-item';
+                imageElement.innerHTML = `
+                    <img src="${image.src}" alt="${image.title}" class="w-full h-64 object-cover">
+                    <div class="p-4 bg-white">
+                        <h3 class="font-bold text-lg">${image.title}</h3>
+                        <p class="text-gray-600">${image.description}</p>
+                    </div>
                 `;
                 
-                container.appendChild(div);
-            });
-        }
-
-        // Populate both image containers
-        populateImageContainer('image-container-1', imageData1);
-        populateImageContainer('image-container-2', imageData2);
-
-        // Mobile menu functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        if (mobileMenuButton) {
-            mobileMenuButton.addEventListener('click', function() {
-                if (mobileMenu.classList.contains('open')) {
-                    mobileMenu.classList.remove('open');
-                } else {
-                    mobileMenu.classList.add('open');
-                }
-            });
-        }
-
-        // Close mobile menu when clicking a link
-        const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.remove('open');
-            });
-        });
-
-        // Popup functionality for Vision and Mission
-        const visionLink = document.getElementById('vision-link');
-        const aboutUsLink = document.getElementById('about-us');
-        const missionLink = document.getElementById('mission-link');
-        const visionPopup = document.getElementById('vision-popup');
-        const missionPopup = document.getElementById('mission-popup');
-        const aboutPopup = document.getElementById('about-popup');
-        const closeVision = document.getElementById('close-vision');
-        const closeMission = document.getElementById('close-mission');
-        const closeAbout = document.getElementById('close-about');
-        
-        // Footer links
-        const visionLinkFooter = document.getElementById('vision-link-footer');
-        const aboutLinkFooter = document.getElementById('about-link-footer');
-        const missionLinkFooter = document.getElementById('mission-link-footer');
-        
-        // Mobile links
-        const mobileVisionLinks = document.querySelectorAll('.mobile-vision-link');
-        const mobileAboutLinks = document.querySelectorAll('.mobile-about-link');
-        const mobileMissionLinks = document.querySelectorAll('.mobile-mission-link');
-        
-        // Add click events for mobile links
-        mobileVisionLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                visionPopup.classList.add('show');
-                mobileMenu.classList.remove('open');
-            });
-        });
-        
-        mobileAboutLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                aboutPopup.classList.add('show');
-                mobileMenu.classList.remove('open');
-            });
-        });
-        
-        mobileMissionLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                missionPopup.classList.add('show');
-                mobileMenu.classList.remove('open');
-            });
-        });
-        
-        if (visionLinkFooter) {
-            visionLinkFooter.addEventListener('click', function(e) {
-                e.preventDefault();
-                visionPopup.classList.add('show');
-            });
+                // Add click event to open lightbox
+                imageElement.addEventListener('click', () => {
+                    openLightbox(image);
+                });
+                
+                galleryContainer.appendChild(imageElement);
+            }
+            
+            // Update pagination
+            updatePagination(page);
         }
         
-        if (aboutLinkFooter) {
-            aboutLinkFooter.addEventListener('click', function(e) {
-                e.preventDefault();
-                aboutPopup.classList.add('show');
-            });
+        // Function to update pagination controls
+        function updatePagination(currentPage) {
+            const paginationContainer = document.getElementById('pagination-container');
+            paginationContainer.innerHTML = '';
+            
+            // Previous button
+            const prevButton = document.createElement('div');
+            prevButton.className = `pagination-button ${currentPage === 1 ? 'disabled' : ''}`;
+            prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            if (currentPage > 1) {
+                prevButton.addEventListener('click', () => {
+                    displayImages(currentPage - 1);
+                });
+            }
+            paginationContainer.appendChild(prevButton);
+            
+            // Page buttons
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('div');
+                pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+                pageButton.textContent = i;
+                pageButton.addEventListener('click', () => {
+                    displayImages(i);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+            
+            // Next button
+            const nextButton = document.createElement('div');
+            nextButton.className = `pagination-button ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            if (currentPage < totalPages) {
+                nextButton.addEventListener('click', () => {
+                    displayImages(currentPage + 1);
+                });
+            }
+            paginationContainer.appendChild(nextButton);
         }
         
-        if (missionLinkFooter) {
-            missionLinkFooter.addEventListener('click', function(e) {
-                e.preventDefault();
-                missionPopup.classList.add('show');
-            });
+        // Function to open lightbox
+        function openLightbox(image) {
+            const lightbox = document.getElementById('image-lightbox');
+            const lightboxImg = lightbox.querySelector('.lightbox-img');
+            const lightboxTitle = lightbox.querySelector('.lightbox-caption h3');
+            const lightboxDesc = lightbox.querySelector('.lightbox-caption p');
+            
+            lightboxImg.src = image.src;
+            lightboxImg.alt = image.title;
+            lightboxTitle.textContent = image.title;
+            lightboxDesc.textContent = image.description;
+            
+            lightbox.classList.add('show');
         }
         
-        // Show Vision popup
-        if (visionLink) {
+        // Function to close lightbox
+        function closeLightbox() {
+            const lightbox = document.getElementById('image-lightbox');
+            lightbox.classList.remove('show');
+        }
+        
+        // Initial display
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display initial images
+            displayImages(1);
+            
+            // Setup popup functionality
+            const visionLink = document.getElementById('vision-link');
+            const visionPopup = document.getElementById('vision-popup');
+            const closeVision = document.getElementById('close-vision');
+            
+            const aboutLink = document.getElementById('about-us');
+            const aboutPopup = document.getElementById('about-popup');
+            const closeAbout = document.getElementById('close-about');
+            
+            const missionLink = document.getElementById('mission-link');
+            const missionPopup = document.getElementById('mission-popup');
+            const closeMission = document.getElementById('close-mission');
+            
+            const joinCommunityBtn = document.getElementById('join-community-button');
+            const payNowBtn = document.getElementById('pay-now-button');
+            const paymentPopup = document.getElementById('payment-popup');
+            const closePayment = document.getElementById('close-payment');
+            const confirmPayment = document.getElementById('confirm-payment');
+            
+            // Vision popup
             visionLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 visionPopup.classList.add('show');
             });
-        }
-        
-        // Show Mission popup
-        if (missionLink) {
+            
+            closeVision.addEventListener('click', function() {
+                visionPopup.classList.add('hide');
+                setTimeout(() => {
+                    visionPopup.classList.remove('show');
+                    visionPopup.classList.remove('hide');
+                }, 300);
+            });
+            
+            // About popup
+            aboutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                aboutPopup.classList.add('show');
+            });
+            
+            closeAbout.addEventListener('click', function() {
+                aboutPopup.classList.add('hide');
+                setTimeout(() => {
+                    aboutPopup.classList.remove('show');
+                    aboutPopup.classList.remove('hide');
+                }, 300);
+            });
+            
+            // Mission popup
             missionLink.addEventListener('click', function(e) {
                 e.preventDefault();
                 missionPopup.classList.add('show');
             });
-        }
-        // Show About popup
-        if (aboutUsLink) {
-            aboutUsLink.addEventListener('click', function(e) {
+            
+            closeMission.addEventListener('click', function() {
+                missionPopup.classList.add('hide');
+                setTimeout(() => {
+                    missionPopup.classList.remove('show');
+                    missionPopup.classList.remove('hide');
+                }, 300);
+            });
+            
+            // Payment popup
+            joinCommunityBtn.addEventListener('click', function() {
+                paymentPopup.classList.add('show');
+            });
+            
+            payNowBtn.addEventListener('click', function() {
+                paymentPopup.classList.add('show');
+            });
+            
+            closePayment.addEventListener('click', function() {
+                paymentPopup.classList.add('hide');
+                setTimeout(() => {
+                    paymentPopup.classList.remove('show');
+                    paymentPopup.classList.remove('hide');
+                }, 300);
+            });
+            
+            confirmPayment.addEventListener('click', function() {
+                // Redirect to WhatsApp community
+                window.open('https://chat.whatsapp.com/FY8YYxZEALm8lLHcEOGAAT', '_blank');
+                paymentPopup.classList.add('hide');
+                setTimeout(() => {
+                    paymentPopup.classList.remove('show');
+                    paymentPopup.classList.remove('hide');
+                }, 300);
+            });
+            
+            // Mobile menu functionality
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+            });
+            
+            // Mobile popup links
+            const mobileVisionLinks = document.querySelectorAll('.mobile-vision-link');
+            mobileVisionLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobileMenu.classList.remove('open');
+                    visionPopup.classList.add('show');
+                });
+            });
+            
+            const mobileAboutLinks = document.querySelectorAll('.mobile-about-link');
+            mobileAboutLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobileMenu.classList.remove('open');
+                    aboutPopup.classList.add('show');
+                });
+            });
+            
+            const mobileMissionLinks = document.querySelectorAll('.mobile-mission-link');
+            mobileMissionLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobileMenu.classList.remove('open');
+                    missionPopup.classList.add('show');
+                });
+            });
+            
+            // Footer links
+            document.getElementById('vision-link-footer').addEventListener('click', function(e) {
+                e.preventDefault();
+                visionPopup.classList.add('show');
+            });
+            
+            document.getElementById('about-link-footer').addEventListener('click', function(e) {
                 e.preventDefault();
                 aboutPopup.classList.add('show');
             });
-        }
-        
-        // Function to close popup with animation
-        function closePopupWithAnimation(popup) {
-            popup.classList.add('hide');
-            setTimeout(() => {
-                popup.classList.remove('show');
-                popup.classList.remove('hide');
-            }, 400); // Match this with the CSS transition duration
-        }
-        
-        // Close Vision popup
-        if (closeVision) {
-            closeVision.addEventListener('click', function() {
-                closePopupWithAnimation(visionPopup);
-            });
-        }
-        
-        // Close Mission popup
-        if (closeMission) {
-            closeMission.addEventListener('click', function() {
-                closePopupWithAnimation(missionPopup);
-            });
-        }
-         // Close About popup
-         if (closeAbout) {
-            closeAbout.addEventListener('click', function() {
-                closePopupWithAnimation(aboutPopup);
-            });
-        }
-        
-        // Payment popup functionality
-        const payNowButton = document.getElementById('pay-now-button');
-        const joinCommunityButton = document.getElementById('join-community-button');
-        const paymentPopup = document.getElementById('payment-popup');
-        const closePayment = document.getElementById('close-payment');
-        const confirmPayment = document.getElementById('confirm-payment');
-        
-        // Show Payment popup from both buttons
-        if (payNowButton) {
-            payNowButton.addEventListener('click', function(e) {
+            
+            document.getElementById('mission-link-footer').addEventListener('click', function(e) {
                 e.preventDefault();
-                paymentPopup.classList.add('show');
+                missionPopup.classList.add('show');
             });
-        }
-        
-        if (joinCommunityButton) {
-            joinCommunityButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                paymentPopup.classList.add('show');
+            
+            // Close lightbox
+            document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+            
+            // Close lightbox when clicking outside the image
+            document.getElementById('image-lightbox').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLightbox();
+                }
             });
-        }
-        
-        // Close Payment popup
-        if (closePayment) {
-            closePayment.addEventListener('click', function() {
-                closePopupWithAnimation(paymentPopup);
-            });
-        }
-        
-        // Confirm Payment button
-        if (confirmPayment) {
-            confirmPayment.addEventListener('click', function() {
-                // Redirect to WhatsApp
-                window.location.href = 'https://chat.whatsapp.com/DBAL0CxzajJ3fgQq1c8HLH';
-            });
-        }
-        
-        // Close popups when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === visionPopup) {
-                closePopupWithAnimation(visionPopup);
-            }
-            if (e.target === missionPopup) {
-                closePopupWithAnimation(missionPopup);
-            }
-            if (e.target === aboutPopup) {
-                closePopupWithAnimation(aboutPopup);
-            }
-            if (e.target === paymentPopup) {
-                closePopupWithAnimation(paymentPopup);
-            }
-        });
-
-        // Handle animation reset for infinite scrolling
-        const scrollElements = document.querySelectorAll('.animate-scroll');
-        scrollElements.forEach(element => {
-            element.addEventListener('animationend', () => {
-                element.style.animation = 'none';
-                void element.offsetWidth; // Trigger reflow
-                element.style.animation = null;
+            
+            // Close popups when clicking outside the content
+            document.querySelectorAll('.popup').forEach(popup => {
+                popup.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.add('hide');
+                        setTimeout(() => {
+                            this.classList.remove('show');
+                            this.classList.remove('hide');
+                        }, 300);
+                    }
+                });
             });
         });
     </script>
